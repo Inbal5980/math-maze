@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>חדר בריחה במתמטיקה — להטמעה בג׳ניאלי</title>
+  <style>
+    body { font-family: system-ui, Arial; background: linear-gradient(135deg,#fde2f3,#e0f2ff); margin: 0; padding: 0; display:flex; align-items:center; justify-content:center; min-height:100vh; }
+    .container { max-width: 800px; background: white; border-radius: 24px; padding: 30px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); text-align:center; }
+    h1 { background:linear-gradient(90deg,#7c3aed,#ec4899,#2563eb); -webkit-background-clip:text; color:transparent; font-weight:900; font-size:2.5rem; margin-bottom:10px; }
+    p.subtitle { font-size:1.2rem; color:#4b5563; margin-bottom:20px; }
+    .row { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:16px; margin:20px 0; }
+    .block { width:120px; height:120px; border-radius:20px; display:flex; align-items:center; justify-content:center; flex-direction:column; font-weight:900; }
+    .b1 { background:linear-gradient(135deg,#fecdd3,#fda4af); border:4px solid #fb7185; }
+    .b2 { background:linear-gradient(135deg,#bfdbfe,#93c5fd); border:4px solid #60a5fa; }
+    .b3 { background:linear-gradient(135deg,#bbf7d0,#86efac); border:4px solid #34d399; width:150px; height:150px; }
+    input { width:70px; height:70px; font-size:2rem; text-align:center; border-radius:12px; border:2px solid #ccc; }
+    .eq { font-size:2.5rem; color:#7c3aed; font-weight:900; }
+    button { padding:14px 24px; font-size:1.2rem; font-weight:800; border:none; border-radius:16px; cursor:pointer; transition:transform .2s; }
+    button:hover { transform:scale(1.05); }
+    .check { background:linear-gradient(90deg,#8b5cf6,#ec4899); color:white; }
+    .again { background:white; color:#c2410c; border:3px solid #fb923c; }
+    .message { margin-top:20px; padding:14px; border-radius:12px; font-weight:800; }
+    .ok { background:#dcfce7; color:#166534; border:3px solid #22c55e; }
+    .warn { background:#ffedd5; color:#9a3412; border:3px solid #fb923c; }
+    .bad { background:#fee2e2; color:#7f1d1d; border:3px solid #ef4444; }
+    .empty { background:#fef9c3; color:#713f12; border:3px solid #facc15; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎯 חדר הבריחה במתמטיקה</h1>
+    <p class="subtitle">השלימו את הסכמה: חלק + חלק = שלם</p>
+
+    <div class="row">
+      <div class="block b1">
+        חלק 1
+        <input id="part1" type="number" placeholder="?" />
+      </div>
+      <div class="eq">+</div>
+      <div class="block b2">
+        חלק 2
+        <input id="part2" type="number" placeholder="?" />
+      </div>
+    </div>
+
+    <div class="eq">=</div>
+
+    <div class="row">
+      <div class="block b3">
+        שלם
+        <input id="whole" type="number" placeholder="?" />
+      </div>
+    </div>
+
+    <div id="feedback"></div>
+
+    <div class="row">
+      <button class="check" id="checkBtn">✓ בדיקה</button>
+      <button class="again" id="againBtn" style="display:none">🔄 נסו שוב</button>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      { part1: 3, part2: 4, whole: 7 },
+      { part1: 3, part2: 7, whole: 10 }
+    ];
+
+    let current = 0;
+
+    const el = id => document.getElementById(id);
+    const part1 = el('part1');
+    const part2 = el('part2');
+    const whole = el('whole');
+    const feedback = el('feedback');
+    const checkBtn = el('checkBtn');
+    const againBtn = el('againBtn');
+
+    function showMessage(type, text){
+      feedback.innerHTML = `<div class="message ${type}">${text}</div>`;
+    }
+
+    function resetInputs(){
+      part1.value = part2.value = whole.value = '';
+      part1.disabled = part2.disabled = whole.disabled = false;
+      againBtn.style.display = 'none';
+      feedback.innerHTML = '';
+    }
+
+    function checkAnswer(){
+      const q = questions[current];
+      const p1 = parseInt(part1.value,10);
+      const p2 = parseInt(part2.value,10);
+      const w = parseInt(whole.value,10);
+
+      if(isNaN(p1)||isNaN(p2)||isNaN(w)){
+        showMessage('empty','נא למלא את כל המספרים ⚠️');
+        return;
+      }
+
+      const correct = ((p1===q.part1 && p2===q.part2)||(p1===q.part2 && p2===q.part1)) && w===q.whole;
+
+      if(correct){
+        part1.disabled=part2.disabled=whole.disabled=true;
+        showMessage('ok','כל הכבוד! כעת לחצו על חץ החזרה בג׳ניאלי וכתבו את הפתרון במקום המתאים כדי לעבור לחדר הבא.');
+        return;
+      }
+
+      if(p1+p2===w){
+        showMessage('warn','התרגיל המתמטי נכון, אבל לא מתאים לפתרון החידה. נסו שוב!');
+        againBtn.style.display='inline-block';
+        return;
+      }
+
+      showMessage('bad','אופס! נסו שוב 💪');
+      againBtn.style.display='inline-block';
+    }
+
+    checkBtn.addEventListener('click',checkAnswer);
+    againBtn.addEventListener('click',resetInputs);
+  </script>
+</body>
+</html>
