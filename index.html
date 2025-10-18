@@ -1,124 +1,129 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html dir="rtl" lang="he">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>חדר בריחה במתמטיקה — להטמעה בג׳ניאלי</title>
+  <title>אקדמיה לקסומים - חדר בריחה מתמטי</title>
   <style>
-    body { font-family: system-ui, Arial; background: linear-gradient(135deg,#fde2f3,#e0f2ff); margin: 0; padding: 0; display:flex; align-items:center; justify-content:center; min-height:100vh; }
-    .container { max-width: 800px; background: white; border-radius: 24px; padding: 30px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); text-align:center; }
-    h1 { background:linear-gradient(90deg,#7c3aed,#ec4899,#2563eb); -webkit-background-clip:text; color:transparent; font-weight:900; font-size:2.5rem; margin-bottom:10px; }
-    p.subtitle { font-size:1.2rem; color:#4b5563; margin-bottom:20px; }
-    .row { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:16px; margin:20px 0; }
-    .block { width:120px; height:120px; border-radius:20px; display:flex; align-items:center; justify-content:center; flex-direction:column; font-weight:900; }
-    .b1 { background:linear-gradient(135deg,#fecdd3,#fda4af); border:4px solid #fb7185; }
-    .b2 { background:linear-gradient(135deg,#bfdbfe,#93c5fd); border:4px solid #60a5fa; }
-    .b3 { background:linear-gradient(135deg,#bbf7d0,#86efac); border:4px solid #34d399; width:150px; height:150px; }
-    input { width:70px; height:70px; font-size:2rem; text-align:center; border-radius:12px; border:2px solid #ccc; }
-    .eq { font-size:2.5rem; color:#7c3aed; font-weight:900; }
-    button { padding:14px 24px; font-size:1.2rem; font-weight:800; border:none; border-radius:16px; cursor:pointer; transition:transform .2s; }
-    button:hover { transform:scale(1.05); }
-    .check { background:linear-gradient(90deg,#8b5cf6,#ec4899); color:white; }
-    .again { background:white; color:#c2410c; border:3px solid #fb923c; }
-    .message { margin-top:20px; padding:14px; border-radius:12px; font-weight:800; }
-    .ok { background:#dcfce7; color:#166534; border:3px solid #22c55e; }
-    .warn { background:#ffedd5; color:#9a3412; border:3px solid #fb923c; }
-    .bad { background:#fee2e2; color:#7f1d1d; border:3px solid #ef4444; }
-    .empty { background:#fef9c3; color:#713f12; border:3px solid #facc15; }
+    * { margin:0; padding:0; box-sizing:border-box }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+      height:100vh; width:100vw; display:flex; align-items:center; justify-content:center; overflow:hidden;
+    }
+    .container { 
+      background:#fff; 
+      border-radius:20px; 
+      padding:25px; 
+      width:90vw;
+      height:50.625vw; /* 90vw * 9/16 = יחס 16:9 */
+      max-height:90vh;
+      max-width:160vh; /* 90vh * 16/9 */
+      box-shadow:0 20px 60px rgba(0,0,0,.3); 
+      overflow:auto; 
+      display:flex; 
+      align-items:center; 
+      justify-content:center; 
+      position:relative 
+    }
+    .container::before{content:'✨'; position:absolute; top:15px; left:15px; font-size:30px; animation:twinkle 2s infinite}
+    .container::after{content:'⭐'; position:absolute; bottom:15px; right:15px; font-size:30px; animation:twinkle 2s infinite 1s}
+    @keyframes twinkle{0%,100%{opacity:1; transform:scale(1)} 50%{opacity:.5; transform:scale(1.2)}}
+    .schema{display:flex; flex-direction:column; align-items:center; gap:10px; width:100%; height:100%; justify-content:center}
+    .boxes-container{display:flex; gap:30px; width:100%; max-width:650px; justify-content:center}
+    .box{flex:1; display:flex; flex-direction:column; gap:12px}
+    .box-label{font-size:24px; font-weight:bold; color:#764ba2; text-align:center}
+    .box-input{background:linear-gradient(135deg,#ffeaa7,#fdcb6e); border:3px solid #fdcb6e; border-radius:15px; padding:25px 20px; min-height:100px; display:flex; align-items:center; justify-content:center}
+    .box-input input{width:100%; font-size:40px; font-weight:bold; text-align:center; border:none; background:transparent; color:#2d3436; outline:none}
+    .arrow{font-size:50px; color:#764ba2; margin:5px 0}
+    .result-label{font-size:24px; font-weight:bold; color:#764ba2; text-align:center; margin-bottom:5px}
+    .result-box{background:linear-gradient(135deg,#a29bfe,#6c5ce7); border:3px solid #6c5ce7; border-radius:15px; padding:25px 35px; min-height:100px; display:flex; align-items:center; justify-content:center; max-width:350px; width:100%}
+    .result-box input{width:100%; font-size:40px; font-weight:bold; text-align:center; border:none; background:transparent; color:#fff; outline:none}
+    button{margin-top:10px; padding:14px 45px; font-size:20px; font-weight:bold; color:#fff; background:linear-gradient(135deg,#667eea,#764ba2); border:none; border-radius:12px; cursor:pointer; transition:.3s; box-shadow:0 5px 15px rgba(102,126,234,.4)}
+    button:hover{transform:translateY(-3px); box-shadow:0 8px 20px rgba(102,126,234,.6)}
+    .message{margin-top:10px; padding:18px; border-radius:12px; font-size:18px; font-weight:bold; text-align:center; display:none; max-width:700px; line-height:1.4}
+    .success{background:linear-gradient(135deg,#55efc4,#00b894); color:#fff; border:3px solid #00b894; display:block}
+    .warning{background:linear-gradient(135deg,#fab1a0,#ff7675); color:#fff; border:3px solid #ff7675; display:block}
+    .error{background:linear-gradient(135deg,#fd79a8,#e84393); color:#fff; border:3px solid #e84393; display:block}
+    .magic-wand{font-size:24px; display:inline-block; animation:wave 1s infinite}
+    @keyframes wave{0%,100%{transform:rotate(0)} 25%{transform:rotate(20deg)} 75%{transform:rotate(-20deg)}}
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>🎯 חדר הבריחה במתמטיקה</h1>
-    <p class="subtitle">השלימו את הסכמה: חלק + חלק = שלם</p>
-
-    <div class="row">
-      <div class="block b1">
-        חלק 1
-        <input id="part1" type="number" placeholder="?" />
+    <div class="schema">
+      <div class="boxes-container">
+        <div class="box">
+          <div class="box-label">התחלה</div>
+          <div class="box-input">
+            <input type="text" id="whole" placeholder="">
+          </div>
+        </div>
+        <div class="box">
+          <div class="box-label">שינוי</div>
+          <div class="box-input">
+            <input type="text" id="start" placeholder="">
+          </div>
+        </div>
       </div>
-      <div class="eq">+</div>
-      <div class="block b2">
-        חלק 2
-        <input id="part2" type="number" placeholder="?" />
+
+      <div class="arrow">↓</div>
+
+      <div class="result-label">סוף</div>
+      <div class="result-box">
+        <input type="text" id="end" placeholder="">
       </div>
-    </div>
 
-    <div class="eq">=</div>
+      <button id="checkBtn">
+        <span class="magic-wand">🪄</span>
+        בדוק תשובה
+        <span class="magic-wand">🪄</span>
+      </button>
 
-    <div class="row">
-      <div class="block b3">
-        שלם
-        <input id="whole" type="number" placeholder="?" />
-      </div>
-    </div>
-
-    <div id="feedback"></div>
-
-    <div class="row">
-      <button class="check" id="checkBtn">✓ בדיקה</button>
-      <button class="again" id="againBtn" style="display:none">🔄 נסו שוב</button>
+      <div id="message" class="message"></div>
     </div>
   </div>
 
   <script>
-    const questions = [
-      { part1: 3, part2: 4, whole: 7 },
-      { part1: 3, part2: 7, whole: 10 }
-    ];
-
-    let current = 0;
-
-    const el = id => document.getElementById(id);
-    const part1 = el('part1');
-    const part2 = el('part2');
-    const whole = el('whole');
-    const feedback = el('feedback');
-    const checkBtn = el('checkBtn');
-    const againBtn = el('againBtn');
-
-    function showMessage(type, text){
-      feedback.innerHTML = `<div class="message ${type}">${text}</div>`;
+    function showMessage(kind, html) {
+      const el = document.getElementById('message');
+      el.className = 'message ' + kind;
+      el.innerHTML = html;
+      el.style.display = 'block';
     }
+    function checkAnswer() {
+      const whole = document.getElementById('whole').value.trim();
+      const start = document.getElementById('start').value.trim();
+      const end   = document.getElementById('end').value.trim();
 
-    function resetInputs(){
-      part1.value = part2.value = whole.value = '';
-      part1.disabled = part2.disabled = whole.disabled = false;
-      againBtn.style.display = 'none';
-      feedback.innerHTML = '';
-    }
+      const fullAnswer  = whole + '+' + start + '=' + end;
+      const cleanAnswer = fullAnswer.replace(/\s/g, '');
 
-    function checkAnswer(){
-      const q = questions[current];
-      const p1 = parseInt(part1.value,10);
-      const p2 = parseInt(part2.value,10);
-      const w = parseInt(whole.value,10);
-
-      if(isNaN(p1)||isNaN(p2)||isNaN(w)){
-        showMessage('empty','נא למלא את כל המספרים ⚠️');
+      if (cleanAnswer === '4+3=7' || cleanAnswer === '3+4=7') {
+        showMessage('success','🎉 כל הכבוד! 🎉<br>כעת לחצו על חץ החזרה וכתבו את הפתרון במקום המתאים כדי לעבור לחדר הבא!');
         return;
       }
-
-      const correct = ((p1===q.part1 && p2===q.part2)||(p1===q.part2 && p2===q.part1)) && w===q.whole;
-
-      if(correct){
-        part1.disabled=part2.disabled=whole.disabled=true;
-        showMessage('ok','כל הכבוד! כעת לחצו על חץ החזרה בג׳ניאלי וכתבו את הפתרון במקום המתאים כדי לעבור לחדר הבא.');
+      if (!whole || !start || !end) {
+        showMessage('error','🤔 אנא מלאו את כל השדות!');
         return;
       }
-
-      if(p1+p2===w){
-        showMessage('warn','התרגיל המתמטי נכון, אבל לא מתאים לפתרון החידה. נסו שוב!');
-        againBtn.style.display='inline-block';
+      const wholeNum = parseInt(whole,10);
+      const startNum = parseInt(start,10);
+      const endNum   = parseInt(end,10);
+      if (isNaN(wholeNum) || isNaN(startNum) || isNaN(endNum)) {
+        showMessage('error','🤔 אנא הכניסו מספרים בלבד!');
         return;
       }
-
-      showMessage('bad','אופס! נסו שוב 💪');
-      againBtn.style.display='inline-block';
+      if (wholeNum + startNum === endNum) {
+        showMessage('warning','✨ התרגיל המתמטי שכתבתם נכון אבל הוא אינו מתאים לפתרון השאלה בחדר. נסו שוב! 💭');
+      } else {
+        showMessage('error','😊 אוי, יש טעות קטנה בחישוב. קחו רגע לחשוב שוב - אתם יכולים! 💪');
+      }
     }
-
-    checkBtn.addEventListener('click',checkAnswer);
-    againBtn.addEventListener('click',resetInputs);
+    document.addEventListener('DOMContentLoaded', () => {
+      const btn = document.getElementById('checkBtn');
+      if (btn) btn.addEventListener('click', checkAnswer);
+    });
   </script>
 </body>
 </html>
