@@ -41,6 +41,8 @@
     .result-box input{width:100%; font-size:40px; font-weight:bold; text-align:center; border:none; background:transparent; color:#fff; outline:none}
     button{margin-top:10px; padding:14px 45px; font-size:20px; font-weight:bold; color:#fff; background:linear-gradient(135deg,#667eea,#764ba2); border:none; border-radius:12px; cursor:pointer; transition:.3s; box-shadow:0 5px 15px rgba(102,126,234,.4)}
     button:hover{transform:translateY(-3px); box-shadow:0 8px 20px rgba(102,126,234,.6)}
+    .retry-btn{background:linear-gradient(135deg,#ff7675,#d63031); box-shadow:0 5px 15px rgba(214,48,49,.4); display:none}
+    .retry-btn:hover{box-shadow:0 8px 20px rgba(214,48,49,.6)}
     .message{margin-top:10px; padding:18px; border-radius:12px; font-size:18px; font-weight:bold; text-align:center; display:none; max-width:700px; line-height:1.4}
     .success{background:linear-gradient(135deg,#55efc4,#00b894); color:#fff; border:3px solid #00b894; display:block}
     .warning{background:linear-gradient(135deg,#fab1a0,#ff7675); color:#fff; border:3px solid #ff7675; display:block}
@@ -80,6 +82,10 @@
         <span class="magic-wand">🪄</span>
       </button>
 
+      <button id="retryBtn" class="retry-btn">
+        🔄 נסו שוב
+      </button>
+
       <div id="message" class="message"></div>
     </div>
   </div>
@@ -91,6 +97,25 @@
       el.innerHTML = html;
       el.style.display = 'block';
     }
+    
+    function showRetryButton() {
+      document.getElementById('retryBtn').style.display = 'inline-block';
+      document.getElementById('checkBtn').style.display = 'none';
+    }
+    
+    function hideRetryButton() {
+      document.getElementById('retryBtn').style.display = 'none';
+      document.getElementById('checkBtn').style.display = 'inline-block';
+    }
+    
+    function resetForm() {
+      document.getElementById('whole').value = '';
+      document.getElementById('start').value = '';
+      document.getElementById('end').value = '';
+      document.getElementById('message').style.display = 'none';
+      hideRetryButton();
+    }
+    
     function checkAnswer() {
       const whole = document.getElementById('whole').value.trim();
       const start = document.getElementById('start').value.trim();
@@ -101,6 +126,7 @@
 
       if (cleanAnswer === '4+3=7' || cleanAnswer === '3+4=7') {
         showMessage('success','🎉 כל הכבוד! 🎉<br>כעת לחצו על חץ החזרה וכתבו את הפתרון במקום המתאים כדי לעבור לחדר הבא!');
+        hideRetryButton();
         return;
       }
       if (!whole || !start || !end) {
@@ -116,13 +142,19 @@
       }
       if (wholeNum + startNum === endNum) {
         showMessage('warning','✨ התרגיל המתמטי שכתבתם נכון אבל הוא אינו מתאים לפתרון השאלה בחדר. נסו שוב! 💭');
+        showRetryButton();
       } else {
-        showMessage('error','😊 אוי, יש טעות קטנה בחישוב. קחו רגע לחשוב שוב - אתם יכולים! 💪');
+        showMessage('error','😊 אופסס.. זה לא נכון. נסו שוב 💪');
+        showRetryButton();
       }
     }
+    
     document.addEventListener('DOMContentLoaded', () => {
-      const btn = document.getElementById('checkBtn');
-      if (btn) btn.addEventListener('click', checkAnswer);
+      const checkBtn = document.getElementById('checkBtn');
+      const retryBtn = document.getElementById('retryBtn');
+      
+      if (checkBtn) checkBtn.addEventListener('click', checkAnswer);
+      if (retryBtn) retryBtn.addEventListener('click', resetForm);
     });
   </script>
 </body>
