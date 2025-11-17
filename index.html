@@ -186,6 +186,16 @@
             transform: translateY(0);
         }
         
+        #tryAgainBtn {
+            margin-top: 10px;
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            box-shadow: 0 5px 15px rgba(9, 132, 227, 0.4);
+        }
+        
+        #tryAgainBtn:hover {
+            box-shadow: 0 8px 20px rgba(9, 132, 227, 0.6);
+        }
+        
         .message {
             margin-top: 12px;
             padding: 18px;
@@ -271,6 +281,10 @@
             </button>
             
             <div id="message" class="message"></div>
+            
+            <button id="tryAgainBtn" onclick="tryAgain()" style="display: none;">
+                🔄 נסו שוב
+            </button>
         </div>
     </div>
     
@@ -280,22 +294,14 @@
             const start = document.getElementById('start').value.trim();
             const end = document.getElementById('end').value.trim();
             const messageDiv = document.getElementById('message');
-            
-            // בניית התרגיל המלא
-            const fullAnswer = whole + '+' + start + '=' + end;
-            const cleanAnswer = fullAnswer.replace(/\s/g, '');
-            
-            // בדיקה אם התשובה היא אחת מהתשובות הנכונות
-            if (cleanAnswer === '3+4=7' || cleanAnswer === '4+3=7') {
-                messageDiv.className = 'message success';
-                messageDiv.innerHTML = '🎉 כל הכבוד! 🎉<br>לחצו על החץ האפור משמאל כדי לעבור לשלב הבא!';
-                return;
-            }
+            const tryAgainBtn = document.getElementById('tryAgainBtn');
             
             // בדיקה שכל השדות מלאים
             if (!whole || !start || !end) {
                 messageDiv.className = 'message error';
                 messageDiv.innerHTML = '🤔 אנא מלאו את כל השדות!';
+                messageDiv.style.display = 'block';
+                tryAgainBtn.style.display = 'none';
                 return;
             }
             
@@ -307,17 +313,46 @@
             if (isNaN(wholeNum) || isNaN(startNum) || isNaN(endNum)) {
                 messageDiv.className = 'message error';
                 messageDiv.innerHTML = '🤔 אנא הכניסו מספרים בלבד!';
+                messageDiv.style.display = 'block';
+                tryAgainBtn.style.display = 'none';
+                return;
+            }
+            
+            // בניית התרגיל המלא
+            const fullAnswer = wholeNum + '+' + startNum + '=' + endNum;
+            
+            // בדיקה אם התשובה היא אחת מהתשובות הנכונות
+            if ((wholeNum === 3 && startNum === 4 && endNum === 7) || 
+                (wholeNum === 4 && startNum === 3 && endNum === 7)) {
+                messageDiv.className = 'message success';
+                messageDiv.innerHTML = '🎉 כל הכבוד! 🎉<br>לחצו על החץ האפור משמאל כדי לעבור לשלב הבא!';
+                messageDiv.style.display = 'block';
+                tryAgainBtn.style.display = 'none';
                 return;
             }
             
             // בדיקה אם החישוב נכון
-            if (wholeNum + startNum === endNum) {
-                messageDiv.className = 'message warning';
-                messageDiv.innerHTML = '✨ התרגיל המתמטי שכתבתם נכון אבל הוא אינו מתאים לפתרון השאלה בחדר. נסו שוב! 💭';
-            } else {
-                messageDiv.className = 'message error';
-                messageDiv.innerHTML = '😊 אוי, יש טעות קטנה בחישוב. קחו רגע לחשוב שוב - אתם יכולים! 💪';
-            }
+            messageDiv.className = 'message warning';
+            messageDiv.innerHTML = '😊 אופס זה עדיין לא נכון';
+            messageDiv.style.display = 'block';
+            tryAgainBtn.style.display = 'inline-block';
+        }
+        
+        function tryAgain() {
+            // ניקוי כל השדות
+            document.getElementById('whole').value = '';
+            document.getElementById('start').value = '';
+            document.getElementById('end').value = '';
+            
+            // הסתרת ההודעה וכפתור "נסו שוב"
+            const messageDiv = document.getElementById('message');
+            messageDiv.style.display = 'none';
+            
+            const tryAgainBtn = document.getElementById('tryAgainBtn');
+            tryAgainBtn.style.display = 'none';
+            
+            // מיקוד בשדה הראשון
+            document.getElementById('whole').focus();
         }
     </script>
 </body>
