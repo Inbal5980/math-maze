@@ -152,6 +152,14 @@
             outline: none;
         }
         
+        .result-static {
+            width: 100%;
+            font-size: 28px;
+            font-weight: bold;
+            text-align: center;
+            color: white;
+        }
+        
         .result-box input {
             width: 100%;
             font-size: 36px;
@@ -271,7 +279,7 @@
             
             <div class="result-label">שלם</div>
             <div class="result-box">
-                <input type="text" id="end" placeholder="">
+                <div class="result-static">לא ידוע</div>
             </div>
             
             <button onclick="checkAnswer()">
@@ -292,12 +300,11 @@
         function checkAnswer() {
             const whole = document.getElementById('whole').value.trim();
             const start = document.getElementById('start').value.trim();
-            const end = document.getElementById('end').value.trim();
             const messageDiv = document.getElementById('message');
             const tryAgainBtn = document.getElementById('tryAgainBtn');
             
             // בדיקה שכל השדות מלאים
-            if (!whole || !start || !end) {
+            if (!whole || !start) {
                 messageDiv.className = 'message error';
                 messageDiv.innerHTML = '🤔 אנא מלאו את כל השדות!';
                 messageDiv.style.display = 'block';
@@ -308,9 +315,8 @@
             // בדיקה שכל הערכים הם מספרים
             const wholeNum = parseInt(whole);
             const startNum = parseInt(start);
-            const endNum = parseInt(end);
             
-            if (isNaN(wholeNum) || isNaN(startNum) || isNaN(endNum)) {
+            if (isNaN(wholeNum) || isNaN(startNum)) {
                 messageDiv.className = 'message error';
                 messageDiv.innerHTML = '🤔 אנא הכניסו מספרים בלבד!';
                 messageDiv.style.display = 'block';
@@ -318,12 +324,9 @@
                 return;
             }
             
-            // בניית התרגיל המלא
-            const fullAnswer = wholeNum + '+' + startNum + '=' + endNum;
-            
             // בדיקה אם התשובה היא אחת מהתשובות הנכונות
-            if ((wholeNum === 3 && startNum === 4 && endNum === 7) || 
-                (wholeNum === 4 && startNum === 3 && endNum === 7)) {
+            if ((wholeNum === 3 && startNum === 4) || 
+                (wholeNum === 4 && startNum === 3)) {
                 messageDiv.className = 'message success';
                 messageDiv.innerHTML = '🎉 כל הכבוד! 🎉<br>לחצו על החץ האפור משמאל כדי לעבור לשלב הבא!';
                 messageDiv.style.display = 'block';
@@ -331,7 +334,7 @@
                 return;
             }
             
-            // בדיקה אם החישוב נכון
+            // תשובה לא נכונה
             messageDiv.className = 'message warning';
             messageDiv.innerHTML = '😊 אופס זה עדיין לא נכון';
             messageDiv.style.display = 'block';
@@ -342,7 +345,6 @@
             // ניקוי כל השדות
             document.getElementById('whole').value = '';
             document.getElementById('start').value = '';
-            document.getElementById('end').value = '';
             
             // הסתרת ההודעה וכפתור "נסו שוב"
             const messageDiv = document.getElementById('message');
